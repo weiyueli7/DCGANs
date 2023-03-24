@@ -29,7 +29,7 @@ torch.manual_seed(manualSeed)
 
 parser = argparse.ArgumentParser(description = 'Generate Fake Images')
 parser.add_argument("--label", type=int, default=6, help="which class of fake image to generate")
-parser.add_argument("--num_epochs", type=int, default=200, help="number of epochs of training")
+parser.add_argument("--num_epochs", type=int, default=300, help="number of epochs of training")
 parser.add_argument("--batch_size", type=int, default=128, help="size of the batches")
 parser.add_argument("--lr", type=float, default=0.0002, help="adam: learning rate")
 parser.add_argument("--beta1", type=float, default=0.5, help="adam: decay of first order momentum of gradient")
@@ -47,9 +47,9 @@ hyperparameters = tuple(hyperparameters)
 label = hyperparameters[0]
 # print(label)
 if label == 6:
-    roots = ['buildings', 'forest', 'glacier', 'mountain', 'sea', 'street']
+    roots = ['buildings', 'forest', 'glacier']#, 'mountain', 'sea', 'street']
 else:
-    roots = ['buildings', 'forest', 'glacier', 'mountain', 'sea', 'street'][label]
+    roots = [['buildings', 'forest', 'glacier', 'mountain', 'sea', 'street'][label]]
 
 
 # Number of workers for dataloader
@@ -89,7 +89,7 @@ ngpu = 1
 
 for r in roots:
     # Root directory for dataset
-    dataroot = f"data/seg_train/seg_train/{r}"
+    dataroot = f"dataset/seg_train/seg_train/{r}"
     
     dataset = create_data(dataroot, image_size)
     
@@ -243,16 +243,13 @@ for r in roots:
         Epoch_D_loss.append(E_D_loss/batch_count)
         Epoch_D_acc.append(E_D_acc/batch_count)
         
-        
-    label_names = [r]
 
-    if not os.path.exists('data/fake'):
-        [os.makedirs(f'data/fake/{name}') for name in label_names]
 
-    for lab in label_names:
-        all_files = os.listdir(f'data/fake/{lab}')
-        [os.remove(f'data/fake/{lab}/{f}') for f in all_files]
+    if not os.path.exists(f'dataset/fake/{r}'):
+        os.makedirs(f'dataset/fake/{r}')
 
+    all_files = os.listdir(f'dataset/fake/{r}')
+    [os.remove(f'dataset/fake/{r}/{f}') for f in all_files if f[-4:] == '.png']
 
 
     im_name = 0
@@ -263,7 +260,7 @@ for r in roots:
             image = (image - image.min()) / (image.max() - image.min()) #to normalize
             image = (image * 255).astype(np.uint8)
             im = Image.fromarray(image, 'RGB')
-            im.save(f'data/fake/{lab}/{im_name}.png')
+            im.save(f'dataset/fake/{lab}/{im_name}.png')
             im_name += 1
     print(f'Fake {r} images done!')
 
