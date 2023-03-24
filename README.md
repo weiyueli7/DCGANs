@@ -14,6 +14,10 @@ Our project aims to revolutionize image synthesis and classification by combinin
 * `resnet.py`: implements the ResNet model
 * `zip.py`: zips the images
 
+### Data
+The dataset and associated structures for this project can be downloaded from [here](https://drive.google.com/file/d/1alGshdcbqKEi5mD6DgQmPHgCNCMPUae8/view?usp=sharing) and [here](https://drive.google.com/file/d/1L5EchJ2qhURek0Q1ub4gFQhyEyjTOHBC/view?usp=sharing).
+
+
 ### Executing program
 
 To generate fake images, run:
